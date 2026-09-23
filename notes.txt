@@ -1,1 +1,85 @@
 ChatGroq is LangChain's wrapper for using LLMs hosted by Groq. It provides a standard chat model interface that can be used with prompts, chains, agents, RAG systems, and tools. The actual model (such as Llama 3.1) runs on Groq's servers, while LangChain communicates with it through the ChatGroq class.
+
+My architecture
+
+                         YOU
+                          │
+                          │
+              "Finish report by 8 AM"
+                          │
+                          ▼
+                ┌─────────────────┐
+                │   AI AGENT      │
+                │                 │
+                │ Understands     │
+                │ your instruction│
+                └────────┬────────┘
+                         │
+                         ▼
+                ┌─────────────────┐
+                │   TASK TOOL     │
+                │                 │
+                │ Create / Update │
+                │ Complete / List │
+                └────────┬────────┘
+                         │
+                         ▼
+                ┌─────────────────┐
+                │    DATABASE     │
+                │                 │
+                │ Tasks           │
+                │ Deadlines       │
+                │ Status          │
+                └─────────────────┘
+                         │
+                         │
+             ┌───────────┴───────────┐
+             │                       │
+             ▼                       ▼
+       User asks agent        10 PM scheduler
+             │                       │
+             │                       ▼
+             │               Daily summary
+             │                       │
+             │                       ▼
+             │                  Email service
+             │                       │
+             │                       ▼
+             │                  📧 You
+             │
+             ▼
+       "I finished it"
+             │
+             ▼
+        Update task
+             │
+             ▼
+       PENDING → COMPLETED
+
+
+
+
+NOTES FOR PARSERS:
+What does this do?
+
+The LLM response is actually a LangChain message object.
+
+Something conceptually like:
+
+AIMessage {
+    content: "Task: Finish the React project..."
+}
+
+StringOutputParser extracts the actual text:
+
+"Task: Finish the React project..."
+
+So:
+
+LLM
+ ↓
+AIMessage
+ ↓
+StringOutputParser
+ ↓
+String
