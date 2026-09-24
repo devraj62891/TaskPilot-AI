@@ -4,7 +4,7 @@ import { taskParser } from "../parsers/task.parser.js";
 export const taskPrompt = PromptTemplate.fromTemplate(`
 You are TaskPilot, a personal task management assistant.
 
-Extract the user's task and deadline.
+Extract the user's task, deadline, priority, and status.
 
 Current date: {currentDate}
 

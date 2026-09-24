@@ -1,15 +1,11 @@
-import { taskPrompt } from "./prompts/task.prompt.js";
-import { llm } from "./llm/groq.js";
+import { taskChain } from "./chains/task.chain.js";
 import { taskParser } from "./parsers/task.parser.js";
 
-const formattedPrompt = await taskPrompt.format({
+const result = await taskChain.invoke({
   currentDate: "23 September 2026",
-  userInput: "I need to finish my React project by 8 AM tomorrow.",
+  userInput: "I need to pay my electricity bill by 6 PM tomorrow.",
   formatInstructions: taskParser.getFormatInstructions(),
 });
 
-const response = await llm.invoke(formattedPrompt);
+console.log(result);
 
-const parsedResponse = await taskParser.parse(response.content);
-
-console.log(parsedResponse);
